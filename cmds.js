@@ -171,7 +171,7 @@ exports.playCmd = rl => {
 					rl.prompt();
 				} else {
 					try {
-						rl.question(colorize(`${quiz.question} `, 'red'), answer => {
+						rl.question(colorize(`${quiz.question}? `, 'red'), answer => {
 							if((quiz.answer).trim().toLowerCase() === answer.trim().toLowerCase()){
 								score++;
 								log(`CORRECTO - LLeva ${score} aciertos.`);
