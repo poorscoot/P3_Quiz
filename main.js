@@ -1,6 +1,7 @@
 const readline = require('readline');
 const {log, bigLog, errorLog, colorize} = require('./out');
 const cmds = require('./cmds');
+const model =require('model');
 
 //Mensaje inicial
 bigLog(' CORE Quiz', 'green');
