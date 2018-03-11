@@ -263,7 +263,7 @@ exports.playCmd = rl => {
 					errorLog(`Fallo.`);
 					rl.prompt();
 				} else {
-					try {
+				
 						process.stdout.isTTY && setTimeout(() => {}, 0);
 						return makeQuestion(rl, `${quiz.question}? `)
 						.then(answer => {
@@ -286,7 +286,7 @@ exports.playCmd = rl => {
 								rl.prompt();
 							}
 		  					});
-					}
+					
   	  		}
   	  	}
   	  	playOne();
