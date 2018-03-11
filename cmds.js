@@ -243,7 +243,7 @@ exports.testCmd = (rl, id) => {
 *	@param rl Objeto readline usado para implementar el CLI.
 */
 exports.playCmd = rl => {
-	validateID(id)
+	validateId(id)
 	.then(id => {
 		let score = 0;
 		let toBeResolved = modes.quizz.findAll();
