@@ -246,30 +246,31 @@ exports.testCmd = (rl, id) => {
 *	@param rl Objeto readline usado para implementar el CLI.
 */
 exports.playCmd = rl => {
-	let score = 0;
-	let toBeResolved = [];
+    let score = 0;
+    let toBeResolved = [];
 
-	models.quiz.findAll()
-	.then(quizzes => {
-		return new Sequelize.Promise((resolve,reject) => {
-			toBeResolved = quizzes;
-			resolve();
-			return;
+    models.quiz.findAll({raw: true})
+    .then(quizzes => {
+        return new Sequelize.Promise((resolve, reject) => {
+            toBeResolved = quizzes;
+            resolve();
+            return;
 		});
-	})
-	.then(() => {
-		playOne();
-	})
+    })
+    .then(() => {
+        return playOne();
+    })
 	.catch(Sequelize.ValidationError, error => {
-		errorLog('El quiz es erroneo:');
-		error.errors.forEach(({message}) => errorLog(message));
-	})
-	.catch(error => {
-		errorLog(error.message);
-	})
-	.then(() => {
-		rl.prompt();
-	});	
+        errorLog('El quiz es erroneo:');
+        error.errors.forEach(({message}) => errorlog(message));
+    })
+    .catch(error => {
+        errorLog(error.message);
+    })
+    .then(() => {
+        rl.prompt();
+        return;
+    });
 
 	const playOne = () => {
 		return new Sequelize.Promise((resolve, reject) => {
@@ -280,13 +281,13 @@ exports.playCmd = rl => {
 				resolve();
 	  	  		return;
 	  	  	} else {
-	  	  		let id = parseInt(Math.random()*(toBeResolved.length-1));
+	  	  		let id = Math.floor(Math.random() * toBeResolved.length);
 	  	  		let quiz = toBeResolved[id];
-		  	  	//if (typeof quiz === "undefined"){
-				//	errorLog(`Fallo.`);
-				//	reject();
-	  	  		//	return;
-				//} else {
+		  	  	if (typeof quiz === "undefined"){
+					errorLog(`Fallo.`);
+					reject();
+	  	  			return;
+				} else {
 					makeQuestion(rl, `${quiz.question}? `)
 					.then(answer => {
 						if(quiz.answer.trim().toLowerCase() === answer.trim().toLowerCase()){
@@ -303,7 +304,7 @@ exports.playCmd = rl => {
 							return;
 						}
 			  		});		
-	  	  		//}
+	  	  		}
 	  	  	}
   	  	})
 	}
@@ -315,11 +316,17 @@ exports.playCmd = rl => {
 *	@param rl Objeto readline usado para implementar el CLI.
 */
 exports.creditsCmd = rl => {
+	return new Sequelize.Promise((resolve,reject) => {
   	  	log('Autores de la práctica:');
     	log('Alexander de la Torre Astanin', 'green');
     	log('Daniel Fuertes Coiras','green');
-    	rl.prompt();
-  	};  	
+  		resolve();
+  		return;
+	})
+	.then(() => {
+		rl.prompt();
+	})
+  };  	
 
 /**
 *Terminar el programa.
@@ -327,5 +334,9 @@ exports.creditsCmd = rl => {
 *	@param rl Objeto readline usado para implementar el CLI.
 */
 exports.quitCmd = rl => {
-  	rl.close();
+	return new Sequelize.Promise((resolve,reject) => {
+  		rl.close();
+  		resolve();
+  		return;
+  	});
   	};  
